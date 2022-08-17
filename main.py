@@ -7,11 +7,14 @@ import os
 import random
 
 today = datetime.now().strftime('%Y-%m-%d')
+
+#format year-month-days
 start_date = os.environ['START_DATE']
-print(start_date)
+
 city = os.environ['CITY']
+
+#format month-days
 birthday = os.environ['BIRTHDAY']
-print(birthday)
 
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
@@ -27,11 +30,11 @@ def get_weather():
   return weather['weather'], math.floor(weather['temp'])
 
 def get_count():
-  delta = datetime.today() - datetime.strptime("2020-08-08", "%Y-%m-%d")
+  delta = datetime.today() - datetime.strptime(start_date, "%Y-%m-%d")
   return delta.days
 
 def get_birthday():
-  next = datetime.strptime(str(date.today().year) + "-" + '01-01', "%Y-%m-%d")
+  next = datetime.strptime(str(date.today().year) + "-" + birthday, "%Y-%m-%d")
   if next < datetime.now():
     next = next.replace(year=next.year + 1)
   return (next - datetime.today()).days
