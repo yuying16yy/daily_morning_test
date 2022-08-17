@@ -40,8 +40,8 @@ def get_birthday():
     next = next.replace(year=next.year + 1)
   return (next - datetime.today()).days
 
- def last_business_day_in_month(year: int, month: int) -> int:
-   return max(calendar.monthcalendar(year, month)[-1:][0][:5])
+def last_business_day_in_month(year: int, month: int) -> int:
+  return max(calendar.monthcalendar(year, month)[-1:][0][:5])
 
 def get_words():
   words = requests.get("https://api.shadiao.pro/chp")
