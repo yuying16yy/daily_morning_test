@@ -1,5 +1,6 @@
 from datetime import date, datetime
 import math
+import calendar
 from wechatpy import WeChatClient
 from wechatpy.client.api import WeChatMessage, WeChatTemplate
 import requests
@@ -39,6 +40,9 @@ def get_birthday():
     next = next.replace(year=next.year + 1)
   return (next - datetime.today()).days
 
+ def last_business_day_in_month(year: int, month: int) -> int:
+   return max(calendar.monthcalendar(year, month)[-1:][0][:5])
+
 def get_words():
   words = requests.get("https://api.shadiao.pro/chp")
   if words.status_code != 200:
@@ -53,6 +57,21 @@ client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 wea, temperature = get_weather()
-data = {"weather":{"value":wea},"temperature":{"value":temperature},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
+
+last_wd = last_business_day_in_month(date.today().year,date.today().month)
+cur_mon = datetime.strptime(str(date.today().year) + "-" + str(date.today().month) + "-" + str(last_wd), "%Y-%m-%d")
+salary_days_diff = (cur_mon - datetime.today()).days
+data = {"weather":{"value":wea, 
+                 "color":get_random_color()},
+        "temperature":{"value":temperature, 
+                 "color":get_random_color()},
+        "salary_day"{"value":salary_days_diff, 
+                 "color":get_random_color()},
+        "love_days":{"value":get_count(), 
+                 "color":get_random_color()},
+        "birthday_left":{"value":get_birthday(), 
+                 "color":get_random_color()},
+        "words":{"value":get_words(), 
+                 "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 print(res)
