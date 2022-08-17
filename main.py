@@ -52,6 +52,11 @@ def get_words():
 def get_random_color():
   return "#%06x" % random.randint(0, 0xFFFFFF)
 
+def get_poetry():
+  poetry = requests.get("https://api.apiopen.top/api/sentences")
+  if poetry.status_code != 200:
+    return get_poetry()
+  return poetry.json()['result']['name']
 
 client = WeChatClient(app_id, app_secret)
 
@@ -71,7 +76,7 @@ data = {"weather":{"value":wea,
                  "color":get_random_color()},
         "birthday_left":{"value":get_birthday(), 
                  "color":get_random_color()},
-        "words":{"value":get_words(), 
+        "words":{"value":get_poetry(), 
                  "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 print(res)
