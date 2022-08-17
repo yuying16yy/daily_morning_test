@@ -8,8 +8,10 @@ import random
 
 today = datetime.now().strftime('%Y-%m-%d')
 start_date = os.environ['START_DATE']
+print(start_date)
 city = os.environ['CITY']
 birthday = os.environ['BIRTHDAY']
+print(birthday)
 
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
@@ -29,7 +31,7 @@ def get_count():
   return delta.days
 
 def get_birthday():
-  next = datetime.strptime(str(date.today().year) + "-" + birthday, "%Y-%m-%d")
+  next = datetime.strptime(str(date.today().year) + "-" + '01-01', "%Y-%m-%d")
   if next < datetime.now():
     next = next.replace(year=next.year + 1)
   return (next - datetime.today()).days
